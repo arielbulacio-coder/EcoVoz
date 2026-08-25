@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { List, Search, MapPin, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { List, Search, MapPin, ArrowRight, ArrowLeft } from 'lucide-react';
 import api from '../utils/api';
 
 const MisObservaciones = () => {
   const [observaciones, setObservaciones] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMisObservaciones = async () => {
@@ -29,6 +30,9 @@ const MisObservaciones = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 mb-2">
+        <button type="button" onClick={() => navigate(-1)} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
+          <ArrowLeft size={24} />
+        </button>
         <List className="text-brand-700" size={24} />
         <h2 className="text-xl font-bold text-gray-800">Mis Observaciones</h2>
       </div>

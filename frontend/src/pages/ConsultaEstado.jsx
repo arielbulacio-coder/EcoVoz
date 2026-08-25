@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import { Search } from 'lucide-react';
+import { Search, ArrowLeft } from 'lucide-react';
 
 const ConsultaEstado = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const initialCode = queryParams.get('codigo') || '';
 
@@ -46,7 +47,12 @@ const ConsultaEstado = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md">Consultar estado</h2>
+      <div className="flex items-center gap-2">
+        <button type="button" onClick={() => navigate(-1)} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
+          <ArrowLeft size={24} />
+        </button>
+        <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md flex-grow">Consultar estado</h2>
+      </div>
       
       <form onSubmit={handleBuscar} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col gap-4">
         <div>

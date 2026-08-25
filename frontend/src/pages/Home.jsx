@@ -19,6 +19,15 @@ const Home = () => {
           <p className="text-sm text-gray-500">Registrar una situación ambiental en el campus.</p>
         </div>
       </Link>
+      <Link to="/mis-observaciones" className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center gap-4 hover:bg-gray-50 transition-colors">
+        <div className="bg-green-100 text-green-700 p-3 rounded-full">
+          <ClipboardList size={28} />
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold text-gray-800">Mis Observaciones</h2>
+          <p className="text-sm text-gray-500">Historial de mis reportes enviados.</p>
+        </div>
+      </Link>
 
       <Link to="/consulta" className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center gap-4 hover:bg-gray-50 transition-colors">
         <div className="bg-blue-100 text-blue-700 p-3 rounded-full">

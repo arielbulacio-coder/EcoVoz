@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Camera } from 'lucide-react';
+import { MapPin, Camera, ArrowLeft } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import api from '../utils/api';
 import { saveDraft } from '../utils/offlineSync';
@@ -111,7 +111,12 @@ const NuevaObservacion = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md">Nueva observación</h2>
+      <div className="flex items-center gap-2">
+        <button type="button" onClick={() => navigate(-1)} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
+          <ArrowLeft size={24} />
+        </button>
+        <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md flex-grow">Nueva observación</h2>
+      </div>
       
       {error && (
         <div className="bg-red-50 text-red-700 border border-red-200 p-3 rounded">
@@ -171,11 +176,12 @@ const NuevaObservacion = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Fotografía (opcional)</label>
-          <button type="button" className="border border-dashed border-gray-400 text-gray-500 p-4 rounded w-full flex justify-center items-center gap-2 hover:bg-gray-50">
+          <span className="block text-sm font-medium text-gray-700 mb-1">Fotografía (opcional)</span>
+          <label className="border border-dashed border-gray-400 text-gray-500 p-4 rounded w-full flex justify-center items-center gap-2 hover:bg-gray-50 cursor-pointer">
             <Camera size={20} />
             + Foto
-          </button>
+            <input type="file" accept="image/*" capture="environment" className="hidden" />
+          </label>
         </div>
 
         <button 

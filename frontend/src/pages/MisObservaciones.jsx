@@ -30,7 +30,7 @@ const MisObservaciones = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 mb-2">
-        <button type="button" onClick={() => navigate(-1)} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
+        <button type="button" onClick={() => navigate(-1)} className="hidden sm:block p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
           <ArrowLeft size={24} />
         </button>
         <List className="text-brand-700" size={24} />

@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import NuevaObservacion from './pages/NuevaObservacion';
 import ConsultaEstado from './pages/ConsultaEstado';
 import Confirmacion from './pages/Confirmacion';
+import MisObservaciones from './pages/MisObservaciones';
 import Navigation from './components/Navigation';
 
 const PrivateRoute = ({ children }) => {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/nueva" element={<PrivateRoute><NuevaObservacion /></PrivateRoute>} />
             <Route path="/confirmacion/:codigo" element={<PrivateRoute><Confirmacion /></PrivateRoute>} />
+            <Route path="/mis-observaciones" element={<PrivateRoute><MisObservaciones /></PrivateRoute>} />
             <Route path="/consulta" element={<ConsultaEstado />} />
           </Routes>
         </main>

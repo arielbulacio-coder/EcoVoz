@@ -74,8 +74,8 @@ const NuevaObservacion = () => {
       return;
     }
 
-    if (needsManualLocation && !formData.ubicacion_referencia) {
-       setError("Error: Debe ingresar una ubicación manual");
+    if (!formData.ubicacion_referencia) {
+       setError("Error: Debe ingresar un detalle manual de la ubicación (edificio, piso, etc.)");
        return;
     }
 
@@ -133,6 +133,9 @@ const NuevaObservacion = () => {
               <option key={c.id} value={c.id}>{c.nombre}</option>
             ))}
           </select>
+          <p className="text-xs text-gray-500 mt-1">
+            * Catálogo oficial gestionado por la Secretaría de Mantenimiento de UNAHUR.
+          </p>
         </div>
 
         <div>
@@ -149,28 +152,22 @@ const NuevaObservacion = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Ubicación *</label>
-          {!needsManualLocation ? (
-             <div className="border border-gray-300 rounded p-3 bg-gray-50 flex items-center gap-3">
-               <MapPin className="text-brand-600" />
-               <span className="text-sm text-gray-700">Pabellón 3 - Planta baja (GPS)</span>
-             </div>
-          ) : (
-            <input
-              type="text"
-              name="ubicacion_referencia"
-              required
-              value={formData.ubicacion_referencia}
-              onChange={handleChange}
-              placeholder="Ej: Edificio Malvinas, Pasillo, Aula 12"
-              className="w-full border border-gray-300 rounded p-2 focus:ring-brand-500 focus:border-brand-500"
-            />
-          )}
+          <label className="block text-sm font-medium text-gray-700 mb-1">Detalle de Ubicación (Edificio, piso, aula) *</label>
           {!needsManualLocation && (
-            <button type="button" onClick={() => setNeedsManualLocation(true)} className="text-brand-700 text-sm mt-1 font-medium">
-              ¿Ubicación incorrecta? Ajustar manualmente
-            </button>
+             <div className="border border-green-200 bg-green-50 rounded p-2 mb-2 flex items-center gap-2">
+               <MapPin className="text-green-600" size={16} />
+               <span className="text-sm text-green-800 font-medium">Coordenadas GPS capturadas. Por favor, precise el lugar exacto:</span>
+             </div>
           )}
+          <input
+            type="text"
+            name="ubicacion_referencia"
+            required
+            value={formData.ubicacion_referencia}
+            onChange={handleChange}
+            placeholder="Ej: Edificio Malvinas, Planta Baja, Pasillo Central"
+            className="w-full border border-gray-300 rounded p-2 focus:ring-brand-500 focus:border-brand-500"
+          />
         </div>
 
         <div>

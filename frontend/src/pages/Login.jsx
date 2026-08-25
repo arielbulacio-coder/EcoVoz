@@ -9,6 +9,15 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    // Validación de dominio UNAHUR
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(estudiantes\.)?unahur\.edu\.ar$/;
+    if (!emailRegex.test(correo)) {
+      setError('Acceso denegado: Debes utilizar un correo institucional (@unahur.edu.ar o @estudiantes.unahur.edu.ar)');
+      return;
+    }
+
     try {
       const { data } = await api.post('/auth/login', { correo });
       localStorage.setItem('token', data.token);

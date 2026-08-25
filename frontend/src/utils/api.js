@@ -9,7 +9,14 @@ const api = {
 
     if (url === '/auth/login') {
       const { correo } = data;
-      // Simulamos que cualquier correo entra. 
+      
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@(estudiantes\.)?unahur\.edu\.ar$/;
+      if (!emailRegex.test(correo)) {
+        const error = new Error('Acceso denegado');
+        error.response = { status: 403 };
+        throw error;
+      }
+
       // Si dice 'operador', le damos permisos.
       const usuario = {
         id: Math.floor(Math.random() * 1000),
@@ -33,6 +40,8 @@ const api = {
 
       const codigo_seguimiento = 'EV-' + new Date().getFullYear() + '-' + Math.random().toString().substring(2, 8);
       
+      const usuarioActual = JSON.parse(localStorage.getItem('usuario') || '{}');
+
       const newObs = {
         codigo_seguimiento,
         clave_operacion,
@@ -42,6 +51,7 @@ const api = {
         ubicacion_metodo,
         ubicacion_referencia: ubicacion_referencia || 'Ubicación automática (GPS)',
         fecha_creacion: new Date().toISOString(),
+        emisor_correo: usuarioActual.correo || 'anonimo@unahur.edu.ar',
         historial: [{ estado_destino: 'RECIBIDA', fecha_hora: new Date().toISOString() }]
       };
       
@@ -78,6 +88,13 @@ const api = {
           { id: 5, nombre: 'Daños en espacios verdes' },
         ]
       };
+    }
+
+    if (url === '/mis-observaciones') {
+      const usuarioActual = JSON.parse(localStorage.getItem('usuario') || '{}');
+      const saved = JSON.parse(localStorage.getItem('db_observaciones') || '[]');
+      const misObs = saved.filter(o => o.emisor_correo === usuarioActual.correo);
+      return { data: misObs };
     }
     
     if (url.startsWith('/observaciones/')) {

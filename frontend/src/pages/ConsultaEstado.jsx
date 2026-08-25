@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import api from '../utils/api';
 import { Search } from 'lucide-react';
 
 const ConsultaEstado = () => {
-  const [codigo, setCodigo] = useState('');
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialCode = queryParams.get('codigo') || '';
+
+  const [codigo, setCodigo] = useState(initialCode);
   const [resultado, setResultado] = useState(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleBuscar = async (e) => {
-    e.preventDefault();
-    if (!codigo) return;
-    
+  useEffect(() => {
+    if (initialCode) {
+      realizarBusqueda(initialCode);
+    }
+  }, [initialCode]);
+
+  const realizarBusqueda = async (codigoBuscado) => {
+    if (!codigoBuscado) return;
     setIsLoading(true);
     setError('');
     setResultado(null);
 
     try {
-      const { data } = await api.get(`/observaciones/${codigo}`);
+      const { data } = await api.get(`/observaciones/${codigoBuscado}`);
       setResultado(data);
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -28,6 +37,11 @@ const ConsultaEstado = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBuscar = (e) => {
+    e.preventDefault();
+    realizarBusqueda(codigo);
   };
 
   return (

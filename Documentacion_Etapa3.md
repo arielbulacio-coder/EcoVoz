@@ -4,6 +4,33 @@ A continuación, se detalla el modelado de datos, las reglas de negocio y el pse
 
 ---
 
+## 2. Descomposición del Caso de Uso
+
+**Caso de Uso Central:** Registrar una observación ambiental en la universidad.
+
+- **Inicio del Flujo:** El usuario (EMISOR), estando autenticado con su correo institucional, selecciona la opción "Nueva Observación" en el panel principal (Dashboard).
+- **Entradas (Inputs):**
+  - Categoría (Selección obligatoria de un catálogo).
+  - Descripción de la situación (Texto libre obligatorio).
+  - Coordenadas de Ubicación (GPS automático provisto por el navegador).
+  - Detalle de Ubicación (Texto libre obligatorio para especificar piso/aula).
+  - Fotografía adjunta (Archivo de imagen opcional).
+- **Operaciones y Decisiones:**
+  - *Validación Local:* ¿El usuario seleccionó una categoría y redactó el detalle de ubicación? (Si NO $\rightarrow$ muestra mensaje de error y aborta).
+  - *Generación de Identidad:* Se genera una `clave_operacion` única (UUID) para este envío, garantizando la idempotencia de la transacción.
+  - *Decisión de Red:* ¿Tiene el dispositivo conexión activa a Internet?
+    - **Si SÍ:** El frontend envía el *payload* completo a la API (`POST /api/observaciones`).
+    - **Si NO:** El frontend intercepta la petición, guarda los datos en el `LocalStorage` como un borrador, y programa un evento de sincronización en diferido.
+- **Salidas (Outputs):**
+  - **Online:** Objeto `Observacion` persistido en la base de datos simulada y generación de un Código de Seguimiento (Ej: `EV-2026-X`).
+  - **Offline:** Objeto `Borrador` guardado localmente y pantalla de confirmación provisional.
+- **Posibles Fallos y Excepciones:**
+  - *Permisos GPS denegados:* Se maneja forzando al usuario a proveer el detalle de ubicación de forma enteramente manual.
+  - *Corte de red repentino:* Si el usuario pierde conexión exactamente durante el POST, el bloque `catch` captura el fallo y procede a ejecutar la lógica de guardado offline.
+  - *Saturación de memoria:* Si la cuota de `LocalStorage` supera los 5MB por culpa de las imágenes, el sistema descartará las fotos y subirá solo los metadatos de texto para no romper la aplicación.
+
+---
+
 ## 3. Modelado de Datos
 
 El sistema EcoVoz Urbana se sostiene sobre cuatro entidades principales orientadas a rastrear la observación ambiental y la auditoría de sus cambios.

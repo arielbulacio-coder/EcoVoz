@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Camera, ArrowLeft } from 'lucide-react';
+import { MapPin, Camera, ArrowLeft, Wifi, WifiOff } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import api from '../utils/api';
 import { saveDraft } from '../utils/offlineSync';
@@ -20,6 +20,7 @@ const NuevaObservacion = () => {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [needsManualLocation, setNeedsManualLocation] = useState(false);
+  const [isSimulatedOffline, setIsSimulatedOffline] = useState(false);
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -88,8 +89,9 @@ const NuevaObservacion = () => {
       clave_operacion: uuidv4()
     };
 
-    if (!navigator.onLine) {
+    if (!navigator.onLine || isSimulatedOffline) {
       await saveDraft(payload);
+      alert("⚠️ Estás sin conexión o simulando falta de internet. Tu observación ha sido guardada como BORRADOR LOCAL. Se sincronizará automáticamente cuando recuperes la conexión.");
       navigate('/confirmacion/offline');
       return;
     }
@@ -116,6 +118,14 @@ const NuevaObservacion = () => {
           <ArrowLeft size={24} />
         </button>
         <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md flex-grow">Nueva observación</h2>
+        <button 
+          type="button" 
+          onClick={() => setIsSimulatedOffline(!isSimulatedOffline)}
+          className={`p-2 rounded-full transition-colors ${isSimulatedOffline ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}
+          title={isSimulatedOffline ? "Simulando sin conexión" : "Conectado"}
+        >
+          {isSimulatedOffline ? <WifiOff size={24} /> : <Wifi size={24} />}
+        </button>
       </div>
       
       {error && (

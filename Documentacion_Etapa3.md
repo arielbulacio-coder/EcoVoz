@@ -207,3 +207,44 @@ INICIO
     FIN INTENTAR
 FIN
 ```
+
+---
+
+## 6. Contrato Mínimo (MVP - Etapa 4)
+
+Para la entrega del Producto Mínimo Viable, el sistema define un **contrato mínimo de operaciones** (Interfaces API) que cubre el ciclo funcional exigido, separando las responsabilidades de interfaz visual y lógica de negocio.
+
+### Componentes a Simular (En Memoria / Navegador)
+Para garantizar una evaluación fluida, sin necesidad de configurar servidores externos o bases de datos complejas (arquitectura "Standalone PWA"), los siguientes componentes estructurales **se resolverán de forma simulada en el navegador**:
+
+1. **Base de Datos:** Reemplazada por `LocalStorage`. Las tablas (observaciones, usuarios) se serializan como objetos JSON persistentes entre recargas.
+2. **Servidor (Backend API):** Reemplazado por un interceptor lógico (Mock en `api.js`) que recibe las peticiones asíncronas del frontend, ejecuta las reglas de negocio (idempotencia, filtrado) e inyecta latencia de 500ms para simular una red real.
+3. **Autenticación (JWT):** Al hacer login, el sistema validará el formato de dominio de UNAHUR y emitirá un token falso. Los roles se determinan heurísticamente (ej: si el correo contiene la palabra "operador", se asigna el rol `OPERADOR`, sino `EMISOR`).
+4. **Almacenamiento de Fotografía:** Las imágenes capturadas con la cámara no se suben a un servidor de archivos real (como AWS S3).
+
+### Operaciones del Contrato Mínimo
+
+El contrato define los siguientes endpoints que la vista consume:
+
+1. **Módulo de Autenticación**
+   - **`POST /api/auth/login`**
+     - **Cuerpo (Request):** `{ "correo": "usuario@estudiantes.unahur.edu.ar" }`
+     - **Respuesta (Response):** Token de sesión y datos básicos del usuario.
+
+2. **Módulo de Dominios (Catálogos)**
+   - **`GET /api/categorias`**
+     - **Respuesta:** Lista inmutable de categorías institucionales (ID y Nombre).
+
+3. **Módulo de Observaciones (Flujo Central)**
+   - **`POST /api/observaciones`** (Creación)
+     - **Cuerpo:** Categoría, descripción, detalle de ubicación, coordenadas y `clave_operacion`.
+     - **Respuesta:** Objeto de la observación que incluye el `codigo_seguimiento` alfanumérico generado.
+   - **`GET /api/observaciones/:codigo`** (Consulta Pública)
+     - **Respuesta:** Datos de la observación y su historial de estados. Omite cualquier dato personal (correo del emisor). Lanza error 404 si el código no existe.
+   - **`GET /api/mis-observaciones`** (Historial Personal)
+     - **Respuesta:** Lista de observaciones filtradas por el correo del emisor autenticado actualmente.
+
+4. **Módulo del Operador (Proyectado/Simulado)**
+   - **`PUT /api/observaciones/:codigo/estado`**
+     - **Cuerpo:** `{ "nuevo_estado": "EN_GESTION", "comentario": "Revisado por mantenimiento" }`
+     - **Respuesta:** Objeto actualizado (Endpoint estipulado en el diseño lógico, aunque la vista de administración del operador no sea requerida funcionalmente para el flujo básico del emisor).

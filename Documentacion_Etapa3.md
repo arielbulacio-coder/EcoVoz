@@ -134,3 +134,76 @@ INICIO
     FIN PARA
 FIN
 ```
+
+### C. Operación: Inicio de Sesión (Login Institucional)
+**Descripción:** Validación de acceso para restringir el uso de la aplicación a miembros de UNAHUR.
+```pascal
+FUNCION IniciarSesion(correoIngresado)
+INICIO
+    // Validar formato estricto institucional
+    SI NO CoincideConRegex(correoIngresado, "*@unahur.edu.ar") Y NO CoincideConRegex(correoIngresado, "*@estudiantes.unahur.edu.ar") ENTONCES
+        RETORNAR ERROR "Debe utilizar un correo institucional válido"
+    FIN SI
+    
+    // Simular comunicación con servidor /auth/login
+    INTENTAR
+        respuesta = Peticion_HTTP_POST("/api/auth/login", correoIngresado)
+        
+        GuardarEnBaseLocal("token", respuesta.token)
+        GuardarEnBaseLocal("usuarioActual", respuesta.usuario)
+        
+        RedirigirA("/inicio")
+    ATRAPAR excepcion
+        RETORNAR ERROR "Error de red o servidor al intentar ingresar"
+    FIN INTENTAR
+FIN
+```
+
+### D. Operación: Consultar Estado Público
+**Descripción:** Permite a cualquier persona revisar el progreso de un reporte usando el código de seguimiento.
+```pascal
+FUNCION ConsultarEstado(codigoBuscado)
+INICIO
+    SI codigoBuscado ESTA VACIO ENTONCES
+        RETORNAR ERROR "Debe ingresar un código"
+    FIN SI
+    
+    INTENTAR
+        observacion = Peticion_HTTP_GET("/api/observaciones/" + codigoBuscado)
+        
+        MostrarDatosEnPantalla(observacion.categoria, observacion.descripcion, observacion.estado_actual)
+        MostrarHistorialDeEstados(observacion.historial)
+        
+    ATRAPAR excepcion (Error_No_Encontrado)
+        RETORNAR ERROR "CÓDIGO INEXISTENTE. Verifique que lo haya escrito bien."
+    ATRAPAR excepcion (Error_De_Red)
+        RETORNAR ERROR "Falla de conexión al consultar"
+    FIN INTENTAR
+FIN
+```
+
+### E. Operación: Ver Mis Observaciones
+**Descripción:** Muestra al usuario autenticado el listado de todos los reportes que él mismo ha enviado.
+```pascal
+FUNCION ObtenerMisObservaciones()
+INICIO
+    usuarioActual = LeerBaseLocal("usuarioActual")
+    
+    INTENTAR
+        listaObservaciones = Peticion_HTTP_GET("/api/mis-observaciones")
+        
+        // En el backend (simulado) se aplica el siguiente filtro:
+        // listaFiltrada = Filtrar(listaCompleta, donde emisor_correo == usuarioActual.correo)
+        // RETORNAR listaFiltrada
+        
+        SI listaObservaciones ESTA VACIA ENTONCES
+            MostrarMensaje("No tienes observaciones registradas aún.")
+        SINO
+            MostrarLista(listaObservaciones, ordenandoPorFechaDescendente)
+        FIN SI
+        
+    ATRAPAR excepcion
+        RETORNAR ERROR "No se pudieron cargar tus observaciones"
+    FIN INTENTAR
+FIN
+```

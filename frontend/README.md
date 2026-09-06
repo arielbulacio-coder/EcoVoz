@@ -1,16 +1,66 @@
-# React + Vite
+# EcoVoz Urbana
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+EcoVoz Urbana es un prototipo de aplicación web progresiva orientado al registro y seguimiento de observaciones ambientales dentro de la Universidad Nacional de Hurlingham (UNAHUR).
 
-Currently, two official plugins are available:
+El MVP permite que una persona autenticada con correo institucional registre una observación, indique su categoría, descripción y ubicación, y obtenga un código de seguimiento. También contempla el almacenamiento local y la recuperación del reporte ante una interrupción de la conectividad.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Aplicación publicada
 
-## React Compiler
+https://arielbulacio-coder.github.io/EcoVoz/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Usuario de prueba
 
-## Expanding the Oxlint configuration
+- Correo: estudiante@unahur.edu.ar
+- Contraseña: no requerida
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Los datos utilizados en las pruebas y demostraciones son ficticios.
+
+## Funcionalidades del MVP
+
+- Acceso mediante un correo institucional de UNAHUR.
+- Registro de una nueva observación ambiental.
+- Selección de una categoría.
+- Descripción de la situación observada.
+- Captura de coordenadas mediante la geolocalización del navegador.
+- Ingreso manual del edificio, piso o sector.
+- Generación de un código dinámico de seguimiento.
+- Consulta del estado de una observación.
+- Visualización de las observaciones registradas.
+- Prevención de registros duplicados mediante una clave de operación.
+- Almacenamiento local de borradores ante una interrupción.
+- Sincronización del borrador al volver a abrir la aplicación con conexión.
+
+## Pruebas principales
+
+### Recorrido válido
+
+La persona inicia sesión, completa los campos obligatorios y envía el reporte. La aplicación registra la observación, genera un código de seguimiento y asigna el estado inicial RECIBIDA.
+
+### Entrada inválida
+
+Si falta un campo obligatorio, la aplicación muestra un mensaje y no registra la observación hasta que se corrija el dato.
+
+### Interrupción y recuperación
+
+Desde el formulario puede activarse la simulación de falta de conexión mediante el ícono de red. En ese caso, la observación se guarda como borrador local. Para simular la recuperación, se vuelve a abrir la aplicación con conexión y el reporte se sincroniza automáticamente, conservando la misma clave de operación para evitar duplicados.
+
+## Implementación
+
+- React
+- Vite
+- Tailwind CSS
+- React Router
+- LocalStorage
+- LocalForage
+- Vite Plugin PWA
+- GitHub Pages
+- GitHub Actions
+
+La versión publicada funciona como un prototipo local. No se encuentra conectada con servicios institucionales ni con un backend productivo.
+
+## Ejecución local
+
+```bash
+cd frontend
+npm install
+npm run dev

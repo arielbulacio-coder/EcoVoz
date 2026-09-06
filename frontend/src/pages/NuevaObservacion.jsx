@@ -91,7 +91,7 @@ const NuevaObservacion = () => {
 
     if (!navigator.onLine || isSimulatedOffline) {
       await saveDraft(payload);
-      alert("⚠️ Estás sin conexión o simulando falta de internet. Tu observación ha sido guardada como BORRADOR LOCAL. Se sincronizará automáticamente cuando recuperes la conexión.");
+      alert("⚠️ La observación fue guardada como BORRADOR LOCAL. Para simular la recuperación de la conexión, cerrá y volvé a abrir la aplicación. El reporte se sincronizará automáticamente.");
       navigate('/confirmacion/offline');
       return;
     }

@@ -21,7 +21,7 @@ const Navigation = () => {
           EcoVoz Urbana
         </Link>
         {token && (
-          <button onClick={handleLogout} className="p-2 hover:bg-brand-800 rounded-full transition-colors">
+          <button onClick={handleLogout} aria-label="Cerrar sesión" className="p-2 hover:bg-brand-800 rounded-full transition-colors">
             <LogOut size={20} />
           </button>
         )}

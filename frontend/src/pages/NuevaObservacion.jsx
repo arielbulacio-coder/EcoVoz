@@ -118,14 +118,32 @@ const NuevaObservacion = () => {
           <ArrowLeft size={24} />
         </button>
         <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md flex-grow">Nueva observación</h2>
-        <button 
-          type="button" 
-          onClick={() => setIsSimulatedOffline(!isSimulatedOffline)}
-          className={`p-2 rounded-full transition-colors ${isSimulatedOffline ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}
-          title={isSimulatedOffline ? "Simulando sin conexión" : "Conectado"}
-        >
-          {isSimulatedOffline ? <WifiOff size={24} /> : <Wifi size={24} />}
-        </button>
+      <button
+  type="button"
+  onClick={() => setIsSimulatedOffline(!isSimulatedOffline)}
+  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors text-sm font-medium whitespace-nowrap ${
+    isSimulatedOffline
+      ? 'bg-red-100 text-red-700'
+      : 'bg-green-100 text-green-700'
+  }`}
+  title={
+    isSimulatedOffline
+      ? 'Desactivar simulación sin conexión'
+      : 'Activar simulación sin conexión'
+  }
+  aria-label={
+    isSimulatedOffline
+      ? 'Desactivar simulación sin conexión'
+      : 'Activar simulación sin conexión'
+  }
+  aria-pressed={isSimulatedOffline}
+>
+  {isSimulatedOffline ? <WifiOff size={20} /> : <Wifi size={20} />}
+
+  <span aria-live="polite">
+    {isSimulatedOffline ? 'Simulación sin conexión' : 'Con conexión'}
+  </span>
+</button>
       </div>
       
       {error && (

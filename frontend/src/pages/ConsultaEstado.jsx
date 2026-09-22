@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { Search, ArrowLeft } from 'lucide-react';
-
 const ConsultaEstado = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -103,7 +102,12 @@ const ConsultaEstado = () => {
               {resultado.ubicacion_metodo === 'MANUAL' ? resultado.ubicacion_referencia : 'Ubicación automática (GPS)'}
             </p>
           </div>
-
+          <div className="mb-4">
+              <p className="text-sm text-gray-500 mb-1">Descripción</p>
+              <p className="text-gray-900 whitespace-pre-wrap break-words">
+                {resultado.descripcion || 'Sin descripción registrada.'}
+              </p>
+          </div>
           <div className="mb-4">
             <p className="text-sm text-gray-500 mb-1">Estado actual</p>
             <span className={`inline-block px-3 py-1 rounded text-sm font-bold

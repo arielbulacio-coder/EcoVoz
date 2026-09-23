@@ -27,7 +27,7 @@ const api = {
     }
     
     if (url === '/observaciones') {
-      const { categoria_id, descripcion, ubicacion_metodo, ubicacion_referencia, clave_operacion } = data;
+      const { categoria_id, descripcion, ubicacion_metodo, ubicacion_referencia, id_operacion } = data;
       
       // Categorías hardcodeadas para la simulación
       const catMap = {
@@ -44,7 +44,7 @@ const api = {
 
       const newObs = {
         codigo_seguimiento,
-        clave_operacion,
+        id_operacion,
         categoria: catMap[categoria_id] || 'Otra situación',
         descripcion,
         estado_actual: 'RECIBIDA',
@@ -59,7 +59,7 @@ const api = {
       const saved = JSON.parse(localStorage.getItem('db_observaciones') || '[]');
       
       // Validamos idempotencia (si ya se envió)
-      const existe = saved.find(o => o.clave_operacion === clave_operacion);
+      const existe = saved.find(o => o.id_operacion === id_operacion);
       if (existe) {
         return { data: existe };
       }

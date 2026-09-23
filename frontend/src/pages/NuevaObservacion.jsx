@@ -118,14 +118,32 @@ const NuevaObservacion = () => {
           <ArrowLeft size={24} />
         </button>
         <h2 className="text-xl font-bold text-brand-900 bg-brand-50 px-4 py-3 rounded-md flex-grow">Nueva observación</h2>
-        <button 
-          type="button" 
-          onClick={() => setIsSimulatedOffline(!isSimulatedOffline)}
-          className={`p-2 rounded-full transition-colors ${isSimulatedOffline ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}
-          title={isSimulatedOffline ? "Simulando sin conexión" : "Conectado"}
-        >
-          {isSimulatedOffline ? <WifiOff size={24} /> : <Wifi size={24} />}
-        </button>
+      <button
+  type="button"
+  onClick={() => setIsSimulatedOffline(!isSimulatedOffline)}
+  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors text-sm font-medium whitespace-nowrap ${
+    isSimulatedOffline
+      ? 'bg-red-100 text-red-700'
+      : 'bg-green-100 text-green-700'
+  }`}
+  title={
+    isSimulatedOffline
+      ? 'Desactivar simulación sin conexión'
+      : 'Activar simulación sin conexión'
+  }
+  aria-label={
+    isSimulatedOffline
+      ? 'Desactivar simulación sin conexión'
+      : 'Activar simulación sin conexión'
+  }
+  aria-pressed={isSimulatedOffline}
+>
+  {isSimulatedOffline ? <WifiOff size={20} /> : <Wifi size={20} />}
+
+  <span aria-live="polite">
+    {isSimulatedOffline ? 'Simulación sin conexión' : 'Con conexión'}
+  </span>
+</button>
       </div>
       
       {error && (
@@ -154,35 +172,61 @@ const NuevaObservacion = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Descripción *</label>
-          <textarea
-            name="descripcion"
-            required
-            rows="3"
-            value={formData.descripcion}
-            onChange={handleChange}
-            placeholder="Describí brevemente lo observado..."
-            className="w-full border border-gray-300 rounded p-2 focus:ring-brand-500 focus:border-brand-500"
-          ></textarea>
+         <div>
+  <label
+    htmlFor="descripcion"
+    className="block text-sm font-medium text-gray-700 mb-1"
+  >
+    Descripción *
+  </label>
+
+  <textarea
+    id="descripcion"
+    name="descripcion"
+    required
+    rows="3"
+    maxLength={300}
+    value={formData.descripcion}
+    onChange={handleChange}
+    placeholder="Describí brevemente lo observado..."
+    aria-describedby="ayuda-descripcion"
+    className="w-full border border-gray-300 rounded p-2 focus:ring-brand-500 focus:border-brand-500"
+  ></textarea>
+
+  <div
+    id="ayuda-descripcion"
+    className="flex justify-between text-sm text-gray-600 mt-1"
+  >
+    <span>Ingresá una descripción de hasta 300 caracteres.</span>
+    <span>{formData.descripcion.length}/300</span>
+  </div>
+</div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Detalle de Ubicación (Edificio, piso, aula) *</label>
+          <label htmlFor="ubicacion_referencia" className="block text-sm font-medium text-gray-700 mb-1">Detalle de Ubicación (Edificio, piso, aula) *</label>
           {!needsManualLocation && (
              <div className="border border-green-200 bg-green-50 rounded p-2 mb-2 flex items-center gap-2">
                <MapPin className="text-green-600" size={16} />
                <span className="text-sm text-green-800 font-medium">Coordenadas GPS capturadas. Por favor, precise el lugar exacto:</span>
              </div>
           )}
-          <input
+          <input 
+            id="ubicacion_referencia"
             type="text"
             name="ubicacion_referencia"
             required
+            minLength={10}
+            maxLength={120}
             value={formData.ubicacion_referencia}
             onChange={handleChange}
             placeholder="Ej: Edificio Malvinas, Planta Baja, Pasillo Central"
+            aria-describedby="ayuda-ubicacion"
             className="w-full border border-gray-300 rounded p-2 focus:ring-brand-500 focus:border-brand-500"
           />
+          <p id="ayuda-ubicacion" className="text-sm text-gray-600 mt-1">
+            Indicá edificio, piso y una referencia concreta que permita encontrar el problema.
+          </p>
         </div>
 
         <div>

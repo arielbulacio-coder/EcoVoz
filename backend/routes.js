@@ -43,9 +43,9 @@ router.get('/categorias', authenticate, async (req, res) => {
 
 // 3. Registrar una observación (Idempotente)
 router.post('/observaciones', authenticate, async (req, res) => {
-  const { categoria_id, descripcion, ubicacion_metodo, ubicacion_referencia, ubicacion_latitud, ubicacion_longitud, clave_operacion } = req.body;
+  const { categoria_id, descripcion, ubicacion_metodo, ubicacion_referencia, ubicacion_latitud, ubicacion_longitud, id_operacion } = req.body;
   
-  if (!categoria_id || !descripcion || !ubicacion_metodo || !clave_operacion) {
+  if (!categoria_id || !descripcion || !ubicacion_metodo || !id_operacion) {
     return res.status(400).json({ error: 'Faltan campos obligatorios' });
   }
 
@@ -53,7 +53,7 @@ router.post('/observaciones', authenticate, async (req, res) => {
 
   try {
     // Idempotencia: Verificar si la operación ya existe
-    const existe = await Observacion.findOne({ where: { clave_operacion } });
+    const existe = await Observacion.findOne({ where: { id_operacion } });
     if (existe) {
       await transaction.rollback();
       return res.json(existe); // Devuelve la respuesta anterior
@@ -63,7 +63,7 @@ router.post('/observaciones', authenticate, async (req, res) => {
 
     const observacion = await Observacion.create({
       codigo_seguimiento,
-      clave_operacion,
+      id_operacion,
       descripcion,
       ubicacion_metodo,
       ubicacion_referencia,

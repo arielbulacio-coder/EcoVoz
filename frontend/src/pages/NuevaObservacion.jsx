@@ -86,7 +86,7 @@ const NuevaObservacion = () => {
     // Generar la clave de operación para idempotencia y soporte offline
     const payload = {
       ...formData,
-      clave_operacion: uuidv4()
+      id_operacion: uuidv4()
     };
 
     if (!navigator.onLine || isSimulatedOffline) {

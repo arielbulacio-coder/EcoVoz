@@ -45,7 +45,7 @@ const Observacion = sequelize.define('Observacion', {
     allowNull: false,
     unique: true,
   },
-  clave_operacion: {
+  id_operacion: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,

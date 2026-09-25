@@ -113,5 +113,6 @@ Indicador textual de conectividad.
 Identidad institucional de UNAHUR.
 Visualización completa de las observaciones.
 Ejecución exitosa de la prueba de idempotencia.
+Prueba de idempotencia: dos envíos con el mismo `id_operacion` generan una única observación.
 
 Las capturas correspondientes se incorporarán en la carpeta revision5/evidencias.

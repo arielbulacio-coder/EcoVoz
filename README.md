@@ -35,8 +35,7 @@ EcoVoz/
 ├── backend/
 ├── frontend/
 ├── revision5/
-├── .github/
-└── Documentacion_Etapa3.md
+└── .github/
 Ejecución del frontend
 
 Ingresar en la carpeta del frontend:
